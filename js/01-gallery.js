@@ -9,9 +9,17 @@ const galleryElements = galleryItems.map(item => {
 
 const handleSelectImg = e => {
   e.preventDefault();
+  if(e.target.tagName !== "IMG") return
   instance = basicLightbox.create(
     `<img src="${e.target.dataset.source}" width="800" height="600">`
-  );
+  , {
+    onShow: () => {
+      document.addEventListener("keydown", handleHideImg);
+    },
+    onClose: () => {
+      document.removeEventListener("keydown", handleHideImg)
+    }
+  });
   instance.show();
 };
 
@@ -24,4 +32,3 @@ const handleHideImg = e => {
 gallery.insertAdjacentHTML("afterbegin", galleryElements.join(""));
 
 gallery.addEventListener("click", handleSelectImg);
-document.addEventListener("keydown", handleHideImg);
